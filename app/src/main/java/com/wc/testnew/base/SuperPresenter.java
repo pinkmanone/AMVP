@@ -1,8 +1,5 @@
 package com.wc.testnew.base;
 
-
-import android.util.Log;
-
 import java.lang.annotation.Annotation;
 import java.lang.ref.WeakReference;
 

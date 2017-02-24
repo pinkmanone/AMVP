@@ -1,14 +1,18 @@
 package com.wc.testnew.base;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Context;
+import android.support.v4.app.Fragment;
 
 import java.lang.annotation.Annotation;
 
+/**
+ * Created by AndroidDeveloper on 2017/2/24/0024.
+ *
+ */
 
-public class SuperActivity<P extends SuperPresenter> extends AppCompatActivity {
-    private P presenter;
+public class SuperFragment<P extends SuperPresenter> extends Fragment {
+
+    private P mPresenter;
 
     public void attach() {
         Annotation[] as = getClass().getAnnotations();
@@ -17,9 +21,9 @@ public class SuperActivity<P extends SuperPresenter> extends AppCompatActivity {
                 if (a instanceof Presenter) {
                     Presenter p = (Presenter) a;
                     try {
-                        presenter = (P) p.value().newInstance();
-                        presenter.attachView(this);
-                    } catch (InstantiationException e) {
+                        mPresenter = (P) p.value().newInstance();
+                        mPresenter.attachView(this);
+                    } catch (java.lang.InstantiationException e) {
                         e.printStackTrace();
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
@@ -29,19 +33,19 @@ public class SuperActivity<P extends SuperPresenter> extends AppCompatActivity {
         }
     }
 
-    public P getPresenter() {
-        return presenter;
+    public P getPresenter(){
+        return mPresenter;
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         attach();
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDetach() {
         getPresenter().onDestroy();
-        super.onDestroy();
+        super.onDetach();
     }
 }
